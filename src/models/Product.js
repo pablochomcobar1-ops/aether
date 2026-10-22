@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { SIZES, SIDES, LINES, PRICE_RANGE } from "@/lib/constants";
+import { SIZES, SIDES, LINES, PRICE_RANGE } from "../lib/constants.js";
 
 const sizeSchema = new mongoose.Schema(
   {

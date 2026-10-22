@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { SIZES, ORDER_STATUSES } from "@/lib/constants";
-
+import { SIZES, ORDER_STATUSES } from "../lib/constants.js";
 const wholePaise = {
   validator: Number.isInteger,
   message: "Amounts must be whole paise",

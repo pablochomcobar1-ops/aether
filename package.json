@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed": "node --env-file=.env.local scripts/seed.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -35,5 +36,6 @@
     "mongodb-memory-server": "^11.3.0",
     "tailwindcss": "^4",
     "vitest": "^5.0.5"
-  }
+  },
+  "type": "module"
 }
