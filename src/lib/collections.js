@@ -11,6 +11,39 @@ export const SIDE_INFO = {
   },
 };
 
+export const CHAPTERS = [
+  {
+    id: "sport",
+    label: "Sport",
+    title: "Built for speed",
+    blurb: "Trainers and high-tops with soft, springy cushioning. Built to be worn hard.",
+    model: "sneaker",
+    mood: "sport",
+    href: "/sport",
+    cta: "Shop Sport",
+  },
+  {
+    id: "street",
+    label: "Street",
+    title: "AE-01 Vapor",
+    blurb: "Our signature low-top. A chunky white sole, a clean upper, and the AETHER mark on the heel.",
+    model: "vapor",
+    mood: "sport",
+    href: "/shop?side=sport&line=street",
+    cta: "Shop Street",
+  },
+  {
+    id: "atelier",
+    label: "Atelier",
+    title: "Quiet authority",
+    blurb: "Loafers, Oxfords and Chelsea boots in real leather, made to last for years.",
+    model: "loafer",
+    mood: "atelier",
+    href: "/atelier",
+    cta: "Shop Atelier",
+  },
+];
+
 export const COLLECTIONS = [
   { side: "sport", line: "run", label: "Run", blurb: "Daily trainers with soft, springy cushioning. Ready for the 10K." },
   { side: "sport", line: "court", label: "Court", blurb: "High-tops and mids that grip hard courts and hard streets." },

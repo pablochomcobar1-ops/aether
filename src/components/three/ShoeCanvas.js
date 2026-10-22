@@ -41,7 +41,7 @@ function Lights({ mood }) {
   );
 }
 
-export default function ShoeCanvas({ model, mood, trigger, onReady, distance = 3.2 }) {
+export default function ShoeCanvas({ model, mood, trigger, onReady, active = true, distance = 3.2 }) {
   const progress = useRef(0);
   const pointer = useRef({ x: 0, y: 0 });
 
@@ -71,6 +71,7 @@ export default function ShoeCanvas({ model, mood, trigger, onReady, distance = 3
 
   return (
     <Canvas
+      frameloop={active ? "always" : "never"}
       dpr={[1, 1.75]}
       camera={{ position: [0, 0.35, 3.2], fov: 30 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}

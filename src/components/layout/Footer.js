@@ -58,7 +58,7 @@ export default function Footer() {
         <p>© {new Date().getFullYear()} AETHER. Designed and built by Jainam Gondaliya.</p>
         <p>
           3D models:{" "}
-          {Object.values(MODELS).map(({ credit }, i) => (
+          {Object.values(MODELS).filter((m) => m.credit).map(({ credit }, i) => (
             <span key={credit.title}>
               {i > 0 && " · "}
               <a href={credit.url} className="underline hover:text-bone" target="_blank" rel="noreferrer">
