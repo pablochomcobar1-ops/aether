@@ -6,7 +6,7 @@ export const SIDE_INFO = {
   },
   atelier: {
     title: "Quiet authority",
-    blurb: "Loafers, Oxfords and boots in real leather, made to last for years.",
+    blurb: "Loafers, Chelsea boots and leather sneakers, made to last for years.",
     model: "chelsea",
   },
 };
@@ -36,7 +36,7 @@ export const CHAPTERS = [
     id: "atelier",
     label: "Atelier",
     title: "Quiet authority",
-    blurb: "Loafers, Oxfords and Chelsea boots in real leather, made to last for years.",
+    blurb: "Loafers, Chelsea boots and leather sneakers, made to last for years.",
     model: "chelsea",
     mood: "atelier",
     href: "/atelier",
@@ -50,7 +50,7 @@ export const COLLECTIONS = [
   { side: "sport", line: "street", label: "Street", blurb: "Clean low-tops for every day. The pairs you'll wear most." },
   { side: "atelier", line: "old-money", label: "Old Money", blurb: "Suede and polished leather loafers. Socks optional." },
   { side: "atelier", line: "classic", label: "Classic", blurb: "White leather sneakers and Chelsea boots that go with everything." },
-  { side: "atelier", line: "formal", label: "Formal", blurb: "Oxfords and monk straps for interviews, weddings and boardrooms." },
+  { side: "atelier", line: "formal", label: "Formal", blurb: "Polished Chelsea boots for interviews, weddings and boardrooms." },
 ];
 
 export const collectionsFor = (side) => COLLECTIONS.filter((c) => c.side === side);

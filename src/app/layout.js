@@ -3,6 +3,7 @@ import SmoothScroll from "@/components/layout/SmoothScroll";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Cursor from "@/components/ui/Cursor";
+import CartDrawer from "@/components/cart/CartDrawer";
 import "./globals.css";
 
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald", display: "swap" });
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
+        <CartDrawer />
       </body>
     </html>
   );

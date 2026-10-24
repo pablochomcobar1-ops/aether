@@ -44,3 +44,29 @@ export function safeNext(value) {
   if (!value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) return "/";
   return value;
 }
+
+const objectId = z.string().regex(/^[a-f0-9]{24}$/i, "Unknown product");
+
+export const cartLinesSchema = z
+  .array(
+    z.object({
+      productId: objectId,
+      size: z.number().int().min(6).max(12),
+      qty: z.number().int().min(1).max(99),
+    })
+  )
+  .max(20, "Your bag can hold up to 20 different items");
+
+export const cartPriceSchema = z.object({
+  lines: cartLinesSchema,
+  couponCode: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .max(20)
+    .regex(/^[A-Z0-9]*$/, "This code isn't valid")
+    .optional()
+    .transform((v) => v || undefined),
+});
+
+export const productIdsSchema = z.array(objectId).max(50);

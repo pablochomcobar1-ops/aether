@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
 import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { cartCount, useCart } from "@/store/cart";
+import { useHydrated } from "@/store/useHydrated";
 
 const links = [
   { href: "/sport", label: "Sport" },
@@ -16,7 +18,6 @@ const icons = [
   { href: "/shop", label: "Search", Icon: Search },
   { href: "/wishlist", label: "Wishlist", Icon: Heart },
   { href: "/orders", label: "Account", Icon: User },
-  { href: "/cart", label: "Bag", Icon: ShoppingBag },
 ];
 
 const iconClass = "grid size-11 place-items-center transition-opacity duration-200 hover:opacity-60";
@@ -29,6 +30,10 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef(null);
+  const hydrated = useHydrated();
+  const count = useCart((s) => cartCount(s.lines));
+  const openCart = useCart((s) => s.setOpen);
+  const bagCount = hydrated ? count : 0;
 
   useMotionValueEvent(scrollY, "change", (current) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -86,11 +91,30 @@ export default function Navbar() {
               key={label}
               href={href}
               aria-label={label}
-              className={`${iconClass} ${label === "Bag" ? "" : "max-md:hidden"}`}
+              className={`${iconClass} max-md:hidden`}
             >
               <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(false);
+              openCart(true);
+            }}
+            aria-label={bagCount ? `Bag, ${bagCount} ${bagCount === 1 ? "item" : "items"}` : "Bag"}
+            className={`${iconClass} relative`}
+          >
+            <ShoppingBag size={20} strokeWidth={1.5} aria-hidden="true" />
+            {bagCount > 0 && (
+              <span
+                aria-hidden="true"
+                className="absolute right-1 top-1.5 grid min-w-4 place-items-center rounded-full bg-bone px-1 text-[10px] font-medium leading-4 text-ink tabular-nums"
+              >
+                {bagCount}
+              </span>
+            )}
+          </button>
           <button
             ref={menuButton}
             type="button"
@@ -115,7 +139,7 @@ export default function Navbar() {
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
           >
             <ul className="flex flex-col gap-2">
-              {[...links, ...icons.slice(1, 3)].map(({ href, label }, index) => (
+              {[...links, ...icons.slice(1)].map(({ href, label }, index) => (
                 <motion.li
                   key={label}
                   initial={{ opacity: 0, transform: reduce ? "none" : "translateY(16px)" }}
