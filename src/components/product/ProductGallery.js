@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ProductImage from "./ProductImage";
 
-const VIEWS = ["Front three-quarter view", "Side view", "Top view", "Material detail"];
+const VIEWS = ["Front three-quarter view", "Side view", "Back view", "Top view"];
 
 export default function ProductGallery({ images, name }) {
   const [active, setActive] = useState(0);
