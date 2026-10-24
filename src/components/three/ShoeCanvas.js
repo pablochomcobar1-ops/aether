@@ -35,8 +35,10 @@ function Lights({ mood }) {
   }
   return (
     <Environment resolution={256}>
-      <Lightformer intensity={1.6} color="#ffe6cc" position={[2, 3, 3]} scale={[6, 6, 1]} form="circle" />
-      <Lightformer intensity={0.6} position={[-4, 1, -2]} rotation-y={Math.PI / 2} scale={[8, 4, 1]} />
+      <Lightformer intensity={4} color="#ffe6cc" position={[2, 3, 3]} scale={[6, 6, 1]} form="circle" />
+      <Lightformer intensity={2.5} color="#fff3e6" position={[0, 5, 0]} rotation-x={Math.PI / 2} scale={[8, 8, 1]} />
+      <Lightformer intensity={3} position={[-5, 1, -2]} rotation-y={Math.PI / 2} scale={[10, 2, 1]} />
+      <Lightformer intensity={3} position={[5, 1, -2]} rotation-y={-Math.PI / 2} scale={[10, 2, 1]} />
     </Environment>
   );
 }

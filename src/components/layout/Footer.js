@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MODELS } from "@/components/three/models";
 
 const columns = [
   {
@@ -56,18 +55,7 @@ export default function Footer() {
 
       <div className="mx-auto flex max-w-screen-2xl flex-col gap-2 border-t border-line px-4 py-6 text-xs text-mute md:flex-row md:justify-between md:px-8">
         <p>© {new Date().getFullYear()} AETHER. Designed and built by Jainam Gondaliya.</p>
-        <p>
-          3D models:{" "}
-          {Object.values(MODELS).filter((m) => m.credit).map(({ credit }, i) => (
-            <span key={credit.title}>
-              {i > 0 && " · "}
-              <a href={credit.url} className="underline hover:text-bone" target="_blank" rel="noreferrer">
-                {credit.title}
-              </a>{" "}
-              by {credit.author} ({credit.license})
-            </span>
-          ))}
-        </p>
+        <p>3D models designed for AETHER.</p>
       </div>
     </footer>
   );

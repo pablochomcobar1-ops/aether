@@ -8,5 +8,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.js"],
+    testTimeout: 30000,
+    hookTimeout: 180000,
   },
 });
