@@ -8,6 +8,7 @@ import { createRazorpayOrder } from "@/lib/razorpay";
 import { rateLimit } from "@/lib/rateLimit";
 import { getSession } from "@/lib/session";
 import { clientIp, jsonError, readJson, sameOrigin, tooMany } from "@/lib/http";
+import { LAST_ORDER_COOKIE } from "@/lib/orderAccess";
 
 const deps = {
   loadProducts: getProductsByIds,
@@ -34,7 +35,7 @@ export async function POST(request) {
   const result = await createCheckout({ body, session: await getSession() }, deps);
   if (!result.ok) return NextResponse.json({ error: result.error.message, ...result.error }, { status: result.status });
 
-  return NextResponse.json(
+  const response = NextResponse.json(
     {
       ...result.data,
       keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -42,4 +43,13 @@ export async function POST(request) {
     },
     { status: 201 }
   );
+  // Only this browser gets to open the success page for this order (see lib/orderAccess.js).
+  response.cookies.set(LAST_ORDER_COOKIE, result.data.orderNumber, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 24 * 60 * 60,
+  });
+  return response;
 }
