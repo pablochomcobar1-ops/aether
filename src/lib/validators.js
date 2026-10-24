@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { INDIAN_STATES } from "./constants.js";
 
 const email = z
   .string({ error: "Enter a valid email address" })
@@ -70,3 +71,25 @@ export const cartPriceSchema = z.object({
 });
 
 export const productIdsSchema = z.array(objectId).max(50);
+
+const text = (min, max, message) => z.string({ error: message }).trim().min(min, message).max(max, message);
+
+export const addressSchema = z.object({
+  name: text(2, 60, "Enter the full name for delivery"),
+  phone: z
+    .string({ error: "Enter a 10-digit Indian mobile number" })
+    .transform((v) => v.replace(/[\s-]/g, "").replace(/^(\+91|0)/, ""))
+    .pipe(z.string().regex(/^[6-9]\d{9}$/, "Enter a 10-digit Indian mobile number")),
+  line1: text(3, 120, "Enter your house number and street"),
+  line2: z.string().trim().max(120, "Keep this under 120 characters").optional().default(""),
+  city: text(2, 60, "Enter your city"),
+  state: z.enum(INDIAN_STATES, { error: "Choose your state" }),
+  pincode: z.string({ error: "Enter a 6-digit PIN code" }).trim().regex(/^[1-9]\d{5}$/, "Enter a 6-digit PIN code"),
+});
+
+export const checkoutSchema = z.object({
+  lines: cartLinesSchema.min(1, "Your bag is empty"),
+  couponCode: cartPriceSchema.shape.couponCode,
+  email,
+  address: addressSchema,
+});
