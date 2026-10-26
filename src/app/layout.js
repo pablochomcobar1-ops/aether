@@ -4,13 +4,13 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Cursor from "@/components/ui/Cursor";
 import CartDrawer from "@/components/cart/CartDrawer";
+import { SITE_URL as site } from "@/lib/site";
 import "./globals.css";
 
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald", display: "swap" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
 
-const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata = {
   metadataBase: new URL(site),

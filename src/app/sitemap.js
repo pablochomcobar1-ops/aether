@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
+import { SITE_URL as site } from "@/lib/site";
 
-const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const revalidate = 3600;
 
 export default async function sitemap() {

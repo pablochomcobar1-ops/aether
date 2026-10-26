@@ -1,10 +1,11 @@
 import { Resend } from "resend";
 import { formatINR } from "./money.js";
+import { SITE_URL } from "./site.js";
 
 const escape = (value) =>
   String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-export function buildOrderEmail(order, siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "") {
+export function buildOrderEmail(order, siteUrl = SITE_URL) {
   const a = order.address;
   const rows = order.items
     .map(
