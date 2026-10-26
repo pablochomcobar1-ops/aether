@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FooterMark from "./FooterMark";
 
 const columns = [
   {
@@ -30,7 +31,7 @@ export default function Footer() {
     <footer className="border-t border-line">
       <div className="mx-auto grid max-w-screen-2xl gap-12 px-4 py-16 md:grid-cols-[2fr_1fr_1fr_1fr] md:px-8">
         <div className="max-w-sm">
-          <p className="font-display text-3xl font-bold uppercase tracking-tight">Aether</p>
+          <FooterMark />
           <p className="mt-4 text-sm leading-relaxed text-mute">
             Built for the track and the boardroom. This is a demo store: payments run in test mode and no orders
             are shipped.
