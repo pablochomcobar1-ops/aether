@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { INDIAN_STATES } from "./constants.js";
+import { INDIAN_STATES, LINES, PRICE_RANGE, SIDES, SIZES } from "./constants.js";
 import { ORDER_NUMBER } from "./orderAccess.js";
 
 const email = z
@@ -103,3 +103,67 @@ export const trackSchema = z.object({
     .regex(ORDER_NUMBER, "Enter the order number from your email, like AE-7KQ2MX"),
   email,
 });
+
+// ---- Admin ----
+
+const IMAGE_PATH = /^\/images\/products\/[a-z0-9-]+\.(webp|jpe?g|png|avif)$/;
+const checkbox = z.unknown().optional().transform((v) => v === true || v === "on");
+const lineList = (maxItems, maxLength, label) =>
+  z
+    .string()
+    .optional()
+    .default("")
+    .transform((v) => v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean))
+    .pipe(
+      z
+        .array(z.string().max(maxLength, `Keep each ${label} under ${maxLength} characters`))
+        .max(maxItems, `Add up to ${maxItems} ${label}s`)
+    );
+
+export const productFormSchema = z
+  .object({
+    name: text(2, 80, "Enter a name (2 to 80 characters)"),
+    slug: z
+      .string({ error: "Enter a slug, like ae-01-vapor-white" })
+      .trim()
+      .toLowerCase()
+      .max(80, "Keep the slug under 80 characters")
+      .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use a-z, 0-9 and single dashes, like ae-01-vapor-white"),
+    side: z.enum(SIDES, { error: "Choose a side" }),
+    line: z.string({ error: "Choose a collection" }),
+    price: z
+      .string({ error: "Enter the price in whole rupees, like 9499" })
+      .trim()
+      .regex(/^\d{1,6}$/, "Enter the price in whole rupees, like 9499")
+      .transform((v) => Number(v) * 100),
+    colorway: z.string().trim().max(60, "Keep the colourway under 60 characters").optional().default(""),
+    description: text(10, 1000, "Write a description (10 to 1000 characters)"),
+    details: lineList(8, 200, "detail"),
+    images: lineList(8, 200, "image").pipe(
+      z.array(z.string().regex(IMAGE_PATH, "Each image must be a path like /images/products/name-1.webp"))
+    ),
+    featured: checkbox,
+    active: checkbox,
+  })
+  .superRefine((data, ctx) => {
+    if (!LINES[data.side].includes(data.line)) {
+      ctx.addIssue({ code: "custom", path: ["line"], message: "Pick a collection from this side" });
+    }
+    const [low, high] = PRICE_RANGE[data.side];
+    if (data.price < low || data.price > high) {
+      const label = data.side === "sport" ? "Sport" : "Atelier";
+      ctx.addIssue({
+        code: "custom",
+        path: ["price"],
+        message: `${label} shoes are priced ₹${(low / 100).toLocaleString("en-IN")} to ₹${(high / 100).toLocaleString("en-IN")}`,
+      });
+    }
+  });
+
+export const stockSchema = z.object({
+  productId: objectId,
+  uk: z.number().int().refine((v) => SIZES.includes(v), "Unknown size"),
+  stock: z.number({ error: "Enter a whole number" }).int("Enter a whole number").min(0, "Stock can't be negative").max(999, "Keep stock under 1000"),
+});
+
+export const objectIdSchema = objectId;

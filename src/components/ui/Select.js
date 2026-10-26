@@ -25,11 +25,14 @@ export default function Select({ label, error, options, placeholder = "Choose…
           <option value="" disabled>
             {placeholder}
           </option>
-          {options.map((option) => (
-            <option key={option} value={option} className="text-bone">
-              {option}
-            </option>
-          ))}
+          {options.map((option) => {
+            const { value, label } = typeof option === "string" ? { value: option, label: option } : option;
+            return (
+              <option key={value} value={value} className="text-bone">
+                {label}
+              </option>
+            );
+          })}
         </select>
         <ChevronDown
           size={18}
