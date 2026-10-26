@@ -32,10 +32,15 @@ export default async function AdminDashboard() {
           </p>
           <ul className="mt-4 divide-y divide-line">
             {d.refunds.map((r) => (
-              <li key={r.id} className="flex flex-wrap justify-between gap-2 py-3 text-sm">
-                <span className="font-mono">{r.orderNumber}</span>
-                <span className="text-mute">{r.email}</span>
-                <span className="tabular-nums">{formatINR(r.total)}</span>
+              <li key={r.id}>
+                <Link
+                  href={`/admin/orders/${r.id}`}
+                  className="flex flex-wrap justify-between gap-2 py-3 text-sm transition-colors hover:bg-carbon md:px-2"
+                >
+                  <span className="font-mono underline">{r.orderNumber}</span>
+                  <span className="text-mute">{r.email}</span>
+                  <span className="tabular-nums">{formatINR(r.total)}</span>
+                </Link>
               </li>
             ))}
           </ul>

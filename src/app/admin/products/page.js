@@ -5,6 +5,7 @@ import { formatINR } from "@/lib/money";
 import ProductImage from "@/components/product/ProductImage";
 import Button from "@/components/ui/Button";
 import ActiveToggle from "@/components/admin/ActiveToggle";
+import { toggleActive } from "@/app/admin/products/actions";
 
 export const metadata = { title: "Products" };
 
@@ -81,7 +82,7 @@ export default async function AdminProducts({ searchParams }) {
                 </span>
               </p>
               <div className="col-start-2 md:col-start-auto">
-                <ActiveToggle productId={id} active={p.active} name={p.name} />
+                <ActiveToggle id={id} active={p.active} label={`Show ${p.name} in the store`} action={toggleActive} />
               </div>
               <div className="col-start-2 md:col-start-auto">
                 <Button href={`/admin/products/${id}`} variant="link">

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { orderTimeline, toPublicOrder } from "../../src/lib/orderView.js";
+import { formatOrderDate, orderTimeline, toPublicOrder } from "../../src/lib/orderView.js";
 
 const at = (d) => new Date(`2026-10-${d}T10:00:00Z`);
 const history = (...pairs) => pairs.map(([status, d]) => ({ status, at: at(d) }));
@@ -62,5 +62,13 @@ describe("toPublicOrder", () => {
     const view = JSON.parse(JSON.stringify(toPublicOrder(order)));
     expect(view.placedAt).toBe(at(20).toISOString());
     expect(view.timeline[0].at).toBe(at(20).toISOString());
+  });
+});
+
+describe("formatOrderDate", () => {
+  it("formats in India time and survives missing dates", () => {
+    expect(formatOrderDate("2026-10-25T19:00:00Z")).toBe("26 Oct 2026");
+    expect(formatOrderDate(undefined)).toBe("—");
+    expect(formatOrderDate("not a date")).toBe("—");
   });
 });

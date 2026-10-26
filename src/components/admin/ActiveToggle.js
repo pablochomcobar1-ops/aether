@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { toggleActive } from "@/app/admin/products/actions";
 
-export default function ActiveToggle({ productId, active, name }) {
+// `action` is a server action that flips the item and returns { ok, error }.
+export default function ActiveToggle({ id, active, label, action, on = "Live", off = "Hidden" }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState("");
@@ -12,7 +12,7 @@ export default function ActiveToggle({ productId, active, name }) {
   function flip() {
     setError("");
     startTransition(async () => {
-      const result = await toggleActive(productId);
+      const result = await action(id);
       if (!result.ok) setError(result.error);
       router.refresh();
     });
@@ -24,7 +24,7 @@ export default function ActiveToggle({ productId, active, name }) {
         type="button"
         role="switch"
         aria-checked={active}
-        aria-label={`Show ${name} in the store`}
+        aria-label={label}
         onClick={flip}
         disabled={pending}
         className="inline-flex min-h-11 items-center gap-3 disabled:opacity-50"
@@ -39,7 +39,7 @@ export default function ActiveToggle({ productId, active, name }) {
             }`}
           />
         </span>
-        <span className="text-sm">{active ? "Live" : "Hidden"}</span>
+        <span className="text-sm">{active ? on : off}</span>
       </button>
       {error && <span className="text-xs text-[#f87171]">{error}</span>}
     </span>

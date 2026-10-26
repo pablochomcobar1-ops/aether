@@ -167,3 +167,66 @@ export const stockSchema = z.object({
 });
 
 export const objectIdSchema = objectId;
+
+const optionalWhole = (message, min) =>
+  z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((v) => (v === undefined || String(v).trim() === "" ? null : String(v).trim()))
+    .pipe(z.string().regex(/^\d{1,7}$/, message).transform(Number).refine((n) => n >= min, message).nullable());
+
+export const couponFormSchema = z
+  .object({
+    code: z
+      .string({ error: "Use 3 to 20 letters or numbers" })
+      .trim()
+      .toUpperCase()
+      .regex(/^[A-Z0-9]{3,20}$/, "Use 3 to 20 letters or numbers"),
+    type: z.enum(["percent", "flat"], { error: "Choose percent or flat" }),
+    value: z.union([z.string(), z.number()]).transform((v) => String(v).trim()),
+    minSubtotal: optionalWhole("Enter whole rupees, or leave empty", 0),
+    maxUses: optionalWhole("Enter a number of 1 or more, or leave empty", 1),
+    expiresAt: z
+      .string()
+      .optional()
+      .transform((v) => v?.trim() || null)
+      .pipe(z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date").nullable()),
+    active: z.unknown().optional().transform((v) => v === true || v === "on"),
+  })
+  // `when` makes this run even if other fields failed, so every problem shows at once.
+  .superRefine(
+    (data, ctx) => {
+      const raw = String(data?.value ?? "").trim();
+      const whole = /^\d{1,7}$/.test(raw) ? Number(raw) : NaN;
+      const percent = data?.type === "percent";
+      if (percent ? whole >= 1 && whole <= 90 : whole >= 1) return;
+      ctx.addIssue({
+        code: "custom",
+        path: ["value"],
+        message: percent ? "Enter a percent from 1 to 90" : "Enter whole rupees, like 500",
+      });
+    },
+    { when: () => true }
+  )
+  .transform((data, ctx) => {
+    const whole = Number(data.value);
+    let expiresAt = null;
+    if (data.expiresAt) {
+      // The code works until midnight India time at the end of the chosen day.
+      expiresAt = new Date(`${data.expiresAt}T23:59:59.999+05:30`);
+      expiresAt = new Date(expiresAt.getTime() + 1);
+      if (Number.isNaN(expiresAt.getTime())) {
+        ctx.addIssue({ code: "custom", path: ["expiresAt"], message: "Pick a date" });
+        return z.NEVER;
+      }
+    }
+    return {
+      code: data.code,
+      type: data.type,
+      value: data.type === "percent" ? whole : whole * 100,
+      minSubtotal: (data.minSubtotal ?? 0) * 100,
+      maxUses: data.maxUses,
+      expiresAt,
+      active: data.active,
+    };
+  });

@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 import { connectDB } from "./db.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
+import Coupon from "../models/Coupon.js";
 import { SIZES } from "./constants.js";
-import { fieldErrors, objectIdSchema, productFormSchema, stockSchema } from "./validators.js";
+import { couponFormSchema, fieldErrors, objectIdSchema, productFormSchema, stockSchema } from "./validators.js";
 
 // These functions trust nothing about the caller. The server actions that use them
 // check the admin role first; these check the data.
@@ -124,4 +125,80 @@ export async function toggleProductActive(id) {
     .lean();
   if (!product) return { ok: false, error: "That product doesn't exist." };
   return { ok: true, active: product.active, slug: product.slug };
+}
+
+// ---- Orders ----
+
+export const ADMIN_ORDER_FILTERS = ["active", "paid", "packed", "shipped", "delivered", "cancelled", "refund", "pending"];
+
+export async function listAdminOrders({ filter = "active", q = "" } = {}) {
+  const query = {};
+  if (filter === "active") query.status = { $in: ["paid", "packed", "shipped"] };
+  else if (filter === "refund") Object.assign(query, { stockIssue: true, status: { $ne: "cancelled" } });
+  else if (ADMIN_ORDER_FILTERS.includes(filter)) query.status = filter;
+
+  const search = typeof q === "string" ? q.trim().slice(0, 60) : "";
+  if (search) {
+    const pattern = new RegExp(escapeRegex(search), "i");
+    query.$or = [{ orderNumber: pattern }, { email: pattern }, { "address.name": pattern }];
+  }
+
+  await connectDB();
+  const [orders, counts] = await Promise.all([
+    Order.find(query).select("-statusHistory -razorpayOrderId").sort({ createdAt: -1 }).limit(100).lean(),
+    Order.aggregate([{ $group: { _id: "$status", n: { $sum: 1 } } }]),
+  ]);
+  return { orders, counts: Object.fromEntries(counts.map((c) => [c._id, c.n])) };
+}
+
+export async function getAdminOrder(id) {
+  if (!objectIdSchema.safeParse(id).success) return null;
+  await connectDB();
+  return Order.findById(id).lean();
+}
+
+// ---- Coupons ----
+
+export async function listCoupons() {
+  await connectDB();
+  return Coupon.find().sort({ active: -1, createdAt: -1 }).lean();
+}
+
+export async function saveCouponData(input, id = null) {
+  const parsed = couponFormSchema.safeParse(input ?? {});
+  if (!parsed.success) return { ok: false, error: "Check the highlighted fields.", fields: fieldErrors(parsed.error) };
+  if (id !== null && !objectIdSchema.safeParse(id).success) return { ok: false, error: "That coupon doesn't exist." };
+
+  await connectDB();
+  try {
+    if (id) {
+      const coupon = await Coupon.findById(id);
+      if (!coupon) return { ok: false, error: "That coupon doesn't exist." };
+      coupon.set(parsed.data);
+      await coupon.save();
+    } else {
+      await Coupon.create(parsed.data);
+    }
+    return { ok: true, code: parsed.data.code };
+  } catch (error) {
+    if (error?.code === 11000) return { ok: false, error: "Check the highlighted fields.", fields: { code: "This code already exists" } };
+    if (error instanceof mongoose.Error.ValidationError) {
+      const fields = Object.fromEntries(Object.entries(error.errors).map(([k, v]) => [k, v.message]));
+      return { ok: false, error: "Check the highlighted fields.", fields };
+    }
+    throw error;
+  }
+}
+
+export async function toggleCouponActive(id) {
+  if (!objectIdSchema.safeParse(id).success) return { ok: false, error: "That coupon doesn't exist." };
+  await connectDB();
+  const coupon = await Coupon.findOneAndUpdate({ _id: id }, [{ $set: { active: { $not: "$active" } } }], {
+    returnDocument: "after",
+    updatePipeline: true,
+  })
+    .select("active")
+    .lean();
+  if (!coupon) return { ok: false, error: "That coupon doesn't exist." };
+  return { ok: true, active: coupon.active };
 }

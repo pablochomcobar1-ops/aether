@@ -36,7 +36,7 @@ export function toPublicOrder(order) {
   return {
     orderNumber: order.orderNumber,
     status: order.status,
-    placedAt: new Date(order.createdAt).toISOString(),
+    placedAt: order.createdAt ? new Date(order.createdAt).toISOString() : null,
     items: order.items.map(({ slug, name, image, size, qty, unitPrice }) => ({
       slug,
       name,
@@ -58,4 +58,8 @@ export function toPublicOrder(order) {
 }
 
 const dateFormat = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
-export const formatOrderDate = (value) => dateFormat.format(new Date(value));
+// One bad date shouldn't take down a whole page of orders.
+export function formatOrderDate(value) {
+  const date = value ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? dateFormat.format(date) : "—";
+}

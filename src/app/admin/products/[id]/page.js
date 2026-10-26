@@ -4,6 +4,7 @@ import { getAdminProduct } from "@/lib/admin";
 import ProductForm from "@/components/admin/ProductForm";
 import StockGrid from "@/components/admin/StockGrid";
 import ActiveToggle from "@/components/admin/ActiveToggle";
+import { toggleActive } from "@/app/admin/products/actions";
 
 export const metadata = { title: "Edit product" };
 
@@ -24,7 +25,7 @@ export default async function EditProduct({ params, searchParams }) {
           <p className="mt-2 text-mute">{product.colorway}</p>
         </div>
         <div className="flex items-center gap-6">
-          <ActiveToggle productId={productId} active={product.active} name={product.name} />
+          <ActiveToggle id={productId} active={product.active} label={`Show ${product.name} in the store`} action={toggleActive} />
           {product.active && (
             <Link href={`/product/${product.slug}`} className="min-h-11 content-center text-sm underline hover:text-mute">
               View in store
