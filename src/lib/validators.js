@@ -1,6 +1,11 @@
 import { z } from "zod";
+
 import { INDIAN_STATES, LINES, PRICE_RANGE, SIDES, SIZES } from "./constants.js";
 import { ORDER_NUMBER } from "./orderAccess.js";
+
+// Zod can speed itself up with eval(). Our Content Security Policy forbids eval, so tell
+// zod not to try (it would work anyway, but the browser logs a violation each time).
+z.config({ jitless: true });
 
 const email = z
   .string({ error: "Enter a valid email address" })

@@ -11,10 +11,14 @@ import ProductCard from "@/components/product/ProductCard";
 export async function generateMetadata({ params }) {
   const product = await getProductBySlug((await params).slug);
   if (!product) return { title: "Shoe not found" };
+  const title = product.colorway ? `${product.name} · ${product.colorway}` : product.name;
+  const images = product.images?.[0] ? [{ url: product.images[0], alt: title }] : undefined;
   return {
-    title: product.name,
+    title,
     description: product.description,
-    openGraph: { images: product.images?.[0] ? [product.images[0]] : [] },
+    alternates: { canonical: `/product/${product.slug}` },
+    openGraph: { title, description: product.description, url: `/product/${product.slug}`, images },
+    twitter: { title, description: product.description, images },
   };
 }
 

@@ -10,9 +10,14 @@ const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald", display: 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
 
+const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata = {
-  title: { default: "AETHER", template: "%s · AETHER" },
-  description: "Premium footwear for the track and the boardroom.",
+  metadataBase: new URL(site),
+  title: { default: "AETHER · Footwear for the track and the boardroom", template: "%s · AETHER" },
+  description: "Premium running shoes, high-tops, loafers and Chelsea boots. A portfolio demo store with real test-mode payments.",
+  openGraph: { type: "website", siteName: "AETHER", locale: "en_IN" },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport = {
