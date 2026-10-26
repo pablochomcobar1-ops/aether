@@ -2,17 +2,17 @@
 
 A premium footwear store, built end to end as a portfolio project. Two sides of one brand: **Sport** (running, court and street shoes) and **Atelier** (loafers, Chelsea boots and formal shoes). The home page has three scroll chapters, each with a 3D shoe that turns as you scroll.
 
-**Live demo:** https://YOUR-PROJECT.vercel.app
+**Live demo:** https://aether-weld-gamma.vercel.app
 
 > This is a demo store. Payments run in Razorpay **test mode**, so no real money moves and nothing ships.
 > To try checkout, use test card **5104 0600 0000 0008**, any future expiry, any CVV, OTP **123456**.
 
 ![Home: Sport chapter](docs/screenshots/home.jpg)
 
-| | |
-|---|---|
+|                                                     |                                                 |
+| --------------------------------------------------- | ----------------------------------------------- |
 | ![Street chapter](docs/screenshots/home-street.jpg) | ![Shop with filters](docs/screenshots/shop.jpg) |
-| ![Product page](docs/screenshots/product.jpg) | ![Checkout](docs/screenshots/checkout.jpg) |
+| ![Product page](docs/screenshots/product.jpg)       | ![Checkout](docs/screenshots/checkout.jpg)      |
 
 ![Admin dashboard](docs/screenshots/admin.jpg)
 
@@ -60,17 +60,17 @@ npm run dev
 
 Environment variables (`.env.local`, never committed):
 
-| Name | What it is |
-|---|---|
-| `MONGODB_URI` | MongoDB Atlas connection string |
-| `SESSION_SECRET` | 32+ random characters for signing sessions |
-| `RAZORPAY_KEY_ID`, `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Razorpay **test** key id (`rzp_test_…`) |
-| `RAZORPAY_KEY_SECRET` | Razorpay test key secret |
-| `RAZORPAY_WEBHOOK_SECRET` | The secret you set on the Razorpay webhook |
-| `RESEND_API_KEY` | Resend API key for confirmation emails |
-| `EMAIL_FROM` | Optional sender, e.g. `AETHER <orders@yourdomain.com>` |
-| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` locally, your live URL in production |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Used once by `npm run seed` to create the admin |
+| Name                                             | What it is                                                   |
+| ------------------------------------------------ | ------------------------------------------------------------ |
+| `MONGODB_URI`                                    | MongoDB Atlas connection string                              |
+| `SESSION_SECRET`                                 | 32+ random characters for signing sessions                   |
+| `RAZORPAY_KEY_ID`, `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Razorpay **test** key id (`rzp_test_…`)                      |
+| `RAZORPAY_KEY_SECRET`                            | Razorpay test key secret                                     |
+| `RAZORPAY_WEBHOOK_SECRET`                        | The secret you set on the Razorpay webhook                   |
+| `RESEND_API_KEY`                                 | Resend API key for confirmation emails                       |
+| `EMAIL_FROM`                                     | Optional sender, e.g. `AETHER <orders@yourdomain.com>`       |
+| `NEXT_PUBLIC_SITE_URL`                           | `http://localhost:3000` locally, your live URL in production |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD`                  | Used once by `npm run seed` to create the admin              |
 
 Tests: `npm test` (160 tests across pricing, coupons, auth, checkout, payment verification, fulfilment, tracking and admin, run against a real MongoDB).
 
