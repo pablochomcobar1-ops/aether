@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { cartCount, useCart } from "@/store/cart";
 import { useHydrated } from "@/store/useHydrated";
+import AetherMark from "@/components/ui/AetherMark";
 
 const links = [
   { href: "/sport", label: "Sport" },
@@ -67,7 +68,12 @@ export default function Navbar() {
       style={{ transform: show ? "translateY(0)" : "translateY(-100%)" }}
     >
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 md:h-20 md:px-8">
-        <Link href="/" className="font-display text-2xl font-bold uppercase tracking-tight">
+        <Link
+          href="/"
+          aria-label="AETHER home"
+          className="flex min-h-11 items-center gap-2.5 font-display text-2xl font-bold uppercase tracking-tight"
+        >
+          <AetherMark className="size-7 md:size-8" />
           Aether
         </Link>
 
