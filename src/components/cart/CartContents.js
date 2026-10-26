@@ -85,7 +85,7 @@ export default function CartContents({ onNavigate, enabled = true }) {
     return (
       <div className="py-16 text-center">
         <p className="font-display text-2xl uppercase tracking-tight">Your bag is empty</p>
-        <p className="mt-2 text-mute">Find a pair you like and it will wait for you here.</p>
+        <p className="mt-2 text-mute">Shoes you add stay here, even if you close the tab.</p>
         <div className="mt-8">
           <Button href="/shop" onClick={onNavigate}>
             Shop all shoes

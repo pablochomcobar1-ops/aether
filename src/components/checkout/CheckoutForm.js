@@ -17,7 +17,7 @@ import Button from "@/components/ui/Button";
 import DemoNotice from "@/components/ui/DemoNotice";
 
 const FIELDS = ["email", "name", "phone", "line1", "line2", "city", "state", "pincode"];
-const PAYMENT_FAILED = "Payment didn't go through. Your cart is saved, try again.";
+const PAYMENT_FAILED = "Payment didn't go through. Your bag is saved, so you can try again.";
 const OFFLINE = "Couldn't reach the server. Check your connection and try again.";
 
 // Same rules the server uses, so a message shown here is the message the server would send.

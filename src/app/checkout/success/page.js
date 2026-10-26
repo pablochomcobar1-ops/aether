@@ -78,7 +78,7 @@ export default async function SuccessPage({ searchParams }) {
 
       {order.stockIssue && (
         <p role="alert" className="mt-8 border border-warning/60 p-4 text-sm">
-          One of your sizes sold out at the same moment you paid. We&apos;ll email you within a day and refund that pair
+          One of your sizes sold out at the same moment you paid. We&apos;ll email you and refund that pair
           in full.
         </p>
       )}

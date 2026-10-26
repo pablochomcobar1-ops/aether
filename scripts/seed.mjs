@@ -6,9 +6,12 @@ import Coupon from "../src/models/Coupon.js";
 import User from "../src/models/User.js";
 import { products, coupons, retiredSlugs } from "./seed-data.mjs";
 
-async function upsert(Model, key, data) {
-  const doc = (await Model.findOne({ [key]: data[key] })) ?? new Model();
-  doc.set(data);
+// Existing shoes keep their live stock: re-running the seed updates text and prices only.
+async function upsert(Model, key, data, { keep = [] } = {}) {
+  const existing = await Model.findOne({ [key]: data[key] });
+  const doc = existing ?? new Model();
+  const fields = existing ? Object.fromEntries(Object.entries(data).filter(([k]) => !keep.includes(k))) : data;
+  doc.set(fields);
   await doc.save();
 }
 
@@ -26,11 +29,11 @@ async function seedAdmin() {
 }
 
 await connectDB();
-for (const product of products) await upsert(Product, "slug", product);
+for (const product of products) await upsert(Product, "slug", product, { keep: ["sizes", "active"] });
 console.log(`Products ready: ${products.length}`);
 const retired = await Product.updateMany({ slug: { $in: retiredSlugs } }, { active: false });
 if (retired.modifiedCount) console.log(`Old shoes hidden: ${retired.modifiedCount}`);
-for (const coupon of coupons) await upsert(Coupon, "code", coupon);
+for (const coupon of coupons) await upsert(Coupon, "code", coupon, { keep: ["uses", "active"] });
 console.log(`Coupons ready: ${coupons.map((c) => c.code).join(", ")}`);
 await seedAdmin();
 await mongoose.disconnect();

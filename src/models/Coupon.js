@@ -8,7 +8,7 @@ const couponSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       uppercase: true,
-      match: [/^[A-Z0-9]{3,20}$/, "Use 3–20 letters or numbers"],
+      match: [/^[A-Z0-9]{3,20}$/, "Use 3 to 20 letters or numbers"],
     },
     type: { type: String, required: true, enum: ["percent", "flat"] },
     value: {
@@ -16,10 +16,7 @@ const couponSchema = new mongoose.Schema(
       required: true,
       min: 1,
       validate: [
-        {
-          validator: Number.isInteger,
-          message: "Value must be a whole number",
-        },
+        { validator: Number.isInteger, message: "Value must be a whole number" },
         {
           validator(value) {
             return this.type !== "percent" || value <= 90;
@@ -34,7 +31,7 @@ const couponSchema = new mongoose.Schema(
     expiresAt: { type: Date, default: null },
     active: { type: Boolean, default: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export default mongoose.models.Coupon || mongoose.model("Coupon", couponSchema);

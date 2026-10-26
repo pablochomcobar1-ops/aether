@@ -9,7 +9,7 @@ import { collectionsFor } from "@/lib/collections";
 const PRICES = [
   { id: "", label: "Any price" },
   { id: "0-6000", label: "Under ₹6,000" },
-  { id: "6000-12000", label: "₹6,000 – ₹12,000" },
+  { id: "6000-12000", label: "₹6,000 to ₹12,000" },
   { id: "12000-", label: "Over ₹12,000" },
 ];
 

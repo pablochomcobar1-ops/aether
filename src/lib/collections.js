@@ -45,10 +45,10 @@ export const CHAPTERS = [
 ];
 
 export const COLLECTIONS = [
-  { side: "sport", line: "run", label: "Run", blurb: "Daily trainers with soft, springy cushioning. Ready for the 10K." },
+  { side: "sport", line: "run", label: "Run", blurb: "Daily trainers with soft, springy cushioning that holds up over a 10K." },
   { side: "sport", line: "court", label: "Court", blurb: "High-tops and mids that grip hard courts and hard streets." },
-  { side: "sport", line: "street", label: "Street", blurb: "Clean low-tops for every day. The pairs you'll wear most." },
-  { side: "atelier", line: "old-money", label: "Old Money", blurb: "Suede and polished leather loafers. Socks optional." },
+  { side: "sport", line: "street", label: "Street", blurb: "Clean low-tops for everyday wear." },
+  { side: "atelier", line: "old-money", label: "Old Money", blurb: "Suede and polished leather loafers, worn with or without socks." },
   { side: "atelier", line: "classic", label: "Classic", blurb: "White leather sneakers and Chelsea boots that go with everything." },
   { side: "atelier", line: "formal", label: "Formal", blurb: "Polished Chelsea boots for interviews, weddings and boardrooms." },
 ];

@@ -19,7 +19,7 @@ export default async function ShopPage({ searchParams }) {
 
   const collection = COLLECTIONS.find((c) => c.line === params.line);
   const title = collection?.label ?? (params.side === "sport" ? "Sport" : params.side === "atelier" ? "Atelier" : "Shop all");
-  const blurb = collection?.blurb ?? SIDE_INFO[params.side]?.blurb ?? "Every AETHER shoe, from the track to the boardroom.";
+  const blurb = collection?.blurb ?? SIDE_INFO[params.side]?.blurb ?? "Every AETHER shoe, Sport and Atelier.";
 
   return (
     <section className="mx-auto max-w-screen-2xl px-4 pb-24 pt-28 md:px-8 md:pt-36">

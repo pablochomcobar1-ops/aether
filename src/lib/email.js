@@ -23,7 +23,7 @@ export function buildOrderEmail(order, siteUrl = SITE_URL) {
   <div style="max-width:560px;margin:0 auto;padding:40px 24px">
     <p style="font-size:28px;font-weight:700;letter-spacing:2px;margin:0">AETHER</p>
     <h1 style="font-size:22px;margin:32px 0 8px">Your order is confirmed</h1>
-    <p style="color:#a3a3a3;margin:0 0 24px">Order ${escape(order.orderNumber)}. We'll email you again when it ships.</p>
+    <p style="color:#a3a3a3;margin:0 0 24px">Order ${escape(order.orderNumber)}. Use the link below to follow its progress.</p>
     <table style="width:100%;border-collapse:collapse;font-size:15px">${rows}</table>
     <table style="width:100%;border-collapse:collapse;font-size:15px;margin-top:16px">
       ${line("Subtotal", formatINR(order.subtotal))}
