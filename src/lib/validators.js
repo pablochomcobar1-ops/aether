@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { INDIAN_STATES } from "./constants.js";
+import { ORDER_NUMBER } from "./orderAccess.js";
 
 const email = z
   .string({ error: "Enter a valid email address" })
@@ -92,4 +93,13 @@ export const checkoutSchema = z.object({
   couponCode: cartPriceSchema.shape.couponCode,
   email,
   address: addressSchema,
+});
+
+export const trackSchema = z.object({
+  orderNumber: z
+    .string({ error: "Enter the order number from your email, like AE-7KQ2MX" })
+    .trim()
+    .toUpperCase()
+    .regex(ORDER_NUMBER, "Enter the order number from your email, like AE-7KQ2MX"),
+  email,
 });

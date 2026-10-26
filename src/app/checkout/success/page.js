@@ -140,7 +140,7 @@ export default async function SuccessPage({ searchParams }) {
       </div>
 
       <div className="mt-12 flex flex-wrap gap-4">
-        <Button href={order.userId ? "/orders" : "/orders/track"}>Track your order</Button>
+        <Button href={order.userId ? "/orders" : `/orders/track?order=${order.orderNumber}`}>Track your order</Button>
         <Button href="/shop" variant="outline">
           Keep shopping
         </Button>

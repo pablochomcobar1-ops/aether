@@ -16,7 +16,7 @@ export function buildOrderEmail(order, siteUrl = process.env.NEXT_PUBLIC_SITE_UR
     .join("");
   const line = (label, value, strong = false) =>
     `<tr><td style="padding:4px 0;color:${strong ? "#fafafa" : "#a3a3a3"}">${label}</td><td style="padding:4px 0;text-align:right;${strong ? "font-weight:600" : ""}">${value}</td></tr>`;
-  const trackUrl = `${siteUrl}/orders/track`;
+  const trackUrl = `${siteUrl}/orders/track?order=${order.orderNumber}`;
 
   const html = `<!doctype html><html><body style="margin:0;background:#000;color:#fafafa;font-family:Helvetica,Arial,sans-serif">
   <div style="max-width:560px;margin:0 auto;padding:40px 24px">
