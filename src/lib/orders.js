@@ -33,7 +33,7 @@ async function takeStock(items) {
 }
 
 export async function fulfilPaidOrder(
-  { razorpayOrderId, razorpayPaymentId },
+  { razorpayOrderId, razorpayPaymentId, amount },
   { sendEmail = sendOrderConfirmation } = {},
   now = new Date()
 ) {
@@ -43,6 +43,15 @@ export async function fulfilPaidOrder(
   await connectDB();
 
   // Only one caller can move an order from pending to paid. Everyone else gets "already paid".
+  // When Razorpay tells us the amount (webhook), it must match what we charged.
+  if (amount !== undefined) {
+    const expected = await Order.findOne({ razorpayOrderId }).select("total orderNumber").lean();
+    if (expected && expected.total !== amount) {
+      console.error(`[orders] amount mismatch for ${expected.orderNumber}: paid ${amount}, expected ${expected.total}`);
+      return { order: null, alreadyPaid: false, amountMismatch: true };
+    }
+  }
+
   const order = await Order.findOneAndUpdate(
     { razorpayOrderId, status: "pending" },
     { $set: { status: "paid", razorpayPaymentId }, $push: { statusHistory: { status: "paid", at: now } } },

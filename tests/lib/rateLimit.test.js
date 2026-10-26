@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { startTestDB, stopTestDB } from "../helpers/db";
-import { rateLimit } from "@/lib/rateLimit";
+import { isLimited, rateLimit } from "@/lib/rateLimit";
 
 beforeAll(startTestDB);
 afterAll(stopTestDB);
@@ -33,5 +33,15 @@ describe("rateLimit", () => {
     const now = new Date("2026-11-01T10:00:00Z");
     const results = await Promise.all(Array.from({ length: 12 }, () => rateLimit("login:e", rule, now)));
     expect(results.filter((r) => r.ok)).toHaveLength(5);
+  });
+
+  it("isLimited looks without counting", async () => {
+    const rule = { limit: 3, windowSec: 3600 };
+    const now = new Date("2026-10-26T10:00:00Z");
+    expect((await isLimited("fail:x", 3, now)).limited).toBe(false);
+    for (let i = 0; i < 3; i++) await rateLimit("fail:x", rule, now);
+    expect((await isLimited("fail:x", 3, now)).limited).toBe(true);
+    expect((await isLimited("fail:x", 3, now)).limited).toBe(true);
+    expect((await isLimited("fail:x", 3, new Date("2026-10-26T11:00:01Z"))).limited).toBe(false);
   });
 });

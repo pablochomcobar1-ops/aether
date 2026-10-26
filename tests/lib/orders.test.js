@@ -47,6 +47,21 @@ beforeEach(() => {
 });
 
 describe("fulfilPaidOrder", () => {
+  it("refuses a webhook whose amount doesn't match what we charged", async () => {
+    const product = await makeProduct(3);
+    const order = await makeOrder(product);
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const result = await fulfilPaidOrder({ razorpayOrderId: order.razorpayOrderId, razorpayPaymentId: "pay_x", amount: 100 }, { sendEmail });
+    spy.mockRestore();
+    expect(result).toMatchObject({ order: null, amountMismatch: true });
+    expect((await Order.findById(order._id)).status).toBe("pending");
+    expect(await stockOf(product)).toBe(3);
+    expect(sendEmail).not.toHaveBeenCalled();
+
+    const ok = await fulfilPaidOrder({ razorpayOrderId: order.razorpayOrderId, razorpayPaymentId: "pay_y", amount: 500000 }, { sendEmail });
+    expect(ok.order.status).toBe("paid");
+  });
+
   it("marks the order paid, records the payment and takes the stock", async () => {
     const product = await makeProduct(3);
     const order = await makeOrder(product, { qty: 2 });

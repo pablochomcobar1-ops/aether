@@ -18,7 +18,7 @@ export async function POST(request) {
     signature: body?.razorpay_signature,
   };
   if (!verifyPaymentSignature(ids)) {
-    return jsonError(400, "We couldn't confirm this payment. If money left your account, it will be refunded automatically.");
+    return jsonError(400, "We couldn't confirm this payment yet. Please don't pay again. If money left your account, we'll match it to your order or refund it.");
   }
 
   const { order } = await fulfilPaidOrder({ razorpayOrderId: ids.orderId, razorpayPaymentId: ids.paymentId });

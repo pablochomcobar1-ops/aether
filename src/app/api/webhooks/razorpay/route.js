@@ -20,7 +20,8 @@ export async function POST(request) {
   if (event.event === "payment.captured" || event.event === "order.paid") {
     const payment = event.payload?.payment?.entity;
     const razorpayOrderId = event.payload?.order?.entity?.id ?? payment?.order_id;
-    await fulfilPaidOrder({ razorpayOrderId, razorpayPaymentId: payment?.id });
+    const amount = Number.isInteger(payment?.amount) ? payment.amount : undefined;
+    await fulfilPaidOrder({ razorpayOrderId, razorpayPaymentId: payment?.id, amount });
   }
 
   // Always answer 200 for a genuine event, or Razorpay keeps retrying it.
