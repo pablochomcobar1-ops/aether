@@ -145,6 +145,7 @@ export default function CheckoutForm({ initial }) {
       currency: order.currency,
       order_id: order.razorpayOrderId,
       name: "AETHER",
+      image: `${window.location.origin}/apple-icon.png`,
       description: `Order ${order.orderNumber}`,
       prefill: order.prefill,
       notes: { orderNumber: order.orderNumber },

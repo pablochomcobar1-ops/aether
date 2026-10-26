@@ -10,6 +10,11 @@ import { getSession } from "@/lib/session";
 import { clientIp, jsonError, readJson, sameOrigin, tooMany } from "@/lib/http";
 import { LAST_ORDER_COOKIE } from "@/lib/orderAccess";
 
+function toRazorpayContact(phone) {
+  const digits = String(phone ?? "").replace(/\D/g, "").slice(-10);
+  return digits.length === 10 ? `+91${digits}` : "";
+}
+
 const deps = {
   loadProducts: getProductsByIds,
   loadCoupon: async (code) => {
@@ -39,7 +44,8 @@ export async function POST(request) {
     {
       ...result.data,
       keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      prefill: { name: body.address?.name ?? "", email: body.email ?? "", contact: body.address?.phone ?? "" },
+      // Razorpay wants the country code, or it asks for the number again.
+      prefill: { name: body.address?.name ?? "", email: body.email ?? "", contact: toRazorpayContact(body.address?.phone) },
     },
     { status: 201 }
   );

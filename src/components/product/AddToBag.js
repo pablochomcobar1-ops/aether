@@ -27,7 +27,7 @@ export default function AddToBag({ product }) {
       <fieldset>
         <div className="flex items-baseline justify-between">
           <legend className="font-display text-xs uppercase tracking-[0.18em] text-mute">Size (UK)</legend>
-          <Link href="/size-guide" className="text-sm underline">
+          <Link href="/size-guide" className="-my-3 inline-flex min-h-11 items-center text-sm underline">
             Size guide
           </Link>
         </div>

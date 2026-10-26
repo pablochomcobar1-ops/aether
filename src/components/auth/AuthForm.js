@@ -121,7 +121,7 @@ export default function AuthForm({ mode, next }) {
 
       <p className="text-center text-sm text-mute">
         {other.text}{" "}
-        <Link href={otherHref} className="text-bone underline">
+        <Link href={otherHref} className="inline-flex min-h-11 items-center text-bone underline">
           {other.label}
         </Link>
       </p>

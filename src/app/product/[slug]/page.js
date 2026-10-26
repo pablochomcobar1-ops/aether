@@ -38,11 +38,11 @@ export default async function ProductPage({ params }) {
 
         <div className="lg:sticky lg:top-28 lg:self-start">
           <nav aria-label="Breadcrumb" className="text-sm text-mute">
-            <Link href={`/shop?side=${product.side}`} className="hover:text-bone">
+            <Link href={`/shop?side=${product.side}`} className="-my-3 inline-flex min-h-11 items-center hover:text-bone">
               {atelier ? "Atelier" : "Sport"}
             </Link>
             <span aria-hidden="true"> / </span>
-            <Link href={`/shop?side=${product.side}&line=${product.line}`} className="hover:text-bone">
+            <Link href={`/shop?side=${product.side}&line=${product.line}`} className="-my-3 inline-flex min-h-11 items-center hover:text-bone">
               {collection?.label}
             </Link>
           </nav>
